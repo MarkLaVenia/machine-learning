@@ -1,6 +1,6 @@
 ---
 title: 'Learning Lab 1 Case Study'
-author: ""
+author: "Mark LaVenia"
 date: "`r format(Sys.Date(),'%B %e, %Y')`"
 output:
   html_document:
@@ -12,7 +12,6 @@ output:
 editor_options:
   markdown:
     wrap: 72
-bibliography: lit/references.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -64,6 +63,8 @@ the green arrow to run the code chunk.
 library(tidyverse)
 library(tidymodels)
 library(janitor)
+
+#setwd("C:/Users/MarkLaVenia/GitHub/machine-learning")
 ```
 
 Next, we'll load the *already-processed* (for this lab) data set that
@@ -101,11 +102,15 @@ dashes after the chunk with your observations.
 
 ```{r}
 
+glimpse(d)
+
 ```
 
 *Observations*:
 
--   
+-   3,793 obs. of 5 variables
+
+-   4 vars are dbl class and 1 is chr
 
 \*What other variables might we include?\*\* This is a great question to
 be asking - surely, including just the four variables we have cannot be
@@ -163,6 +168,7 @@ Run the following code to split the data:
 set.seed(20220712)
 train_test_split <- initial_split(d, prop = .80)
 data_train <- training(train_test_split)
+
 ```
 
 Go ahead and type `data_train` and `d` into the console (in steps) to
@@ -172,7 +178,10 @@ in the larger data. Do that in the chunk below:
 [Your Turn]{style="color: green;"} ⤵
 
 ```{r}
+train_prop <- count(data_train) / count(d)
 
+train_prop
+# 0.7998945
 ```
 
 ## Step 2: Engineer features and write down the recipe
@@ -274,6 +283,7 @@ Type `final_fit` below; this is the final, fitted model---one that can
 be interpreted further in the next step!
 
 ```{r}
+final_fit 
 ```
 
 You may see a message/warning above or when you examine `final_fit`; you
@@ -325,7 +335,10 @@ Let's interpret the above. If the value of `correct` is `TRUE` when the
 predicted and known code are the same, what does the `percent` column
 tell us? Add one or more notes to the dashes below:
 
--   
+-   The model correctly predicted the classification 87% of the time.
+
+-   This seems like a pretty high level of correct prediction, given the
+    independent variables in the model.
 
 A short-cut to the above is below:
 
@@ -336,9 +349,15 @@ final_fit %>%
 
 **Observations**
 
--   
+-   To the extent that understanding incorrect prediction is important,
+    it might be insightful to inspect whether it was usually wrong
+    because it over predicted TS or SB, or was it roughly incorrect on
+    each evenly. Also some understanding of base rates of each
+    classification in the coded data could inform our interpretation of
+    incorrectly predicted classifications.
 
--   
+-   roc_auc: Area under the receiver operator curve of 94% is also a
+    fairly diagnostic indicator of the model's performance.
 
 That's it for now; the core parts of machine learning are used in the
 above steps you took; what we'll do after this leaning lab only adds
